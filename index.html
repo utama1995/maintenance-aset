@@ -157,79 +157,43 @@ document.getElementById("hasil").innerHTML="Error koneksi server";
 });
 }
 function kirimLaporan(){
-
-var nama=document.getElementById("nama").value;
-var cabang=document.getElementById("cabang").value;
-var aset=document.getElementById("aset").value;
-var deskripsi=document.getElementById("deskripsi").value;
-
-var file=document.getElementById("foto").files[0];
-
-if(!nama||!cabang||!aset||!deskripsi||!file){
-
-document.getElementById("hasilLapor").innerHTML="<span class='error'>Lengkapi semua data</span>";
-return;
-
-}
-
-document.getElementById("hasilLapor").innerHTML="Mengirim laporan...";
-
 var reader=new FileReader();
-
 reader.onload=function(){
-
 var base64=reader.result.split(',')[1];
-
-fetch(API_URL,{
-
-method:"POST",
-
-body:new URLSearchParams({
-
-nama:nama,
-cabang:cabang,
-aset:aset,
-deskripsi:deskripsi,
-foto:base64
-
-})
-
+var formData = new FormData();
+formData.append("nama", nama);
+formData.append("cabang", cabang);
+formData.append("aset", aset);
+formData.append("deskripsi", deskripsi);
+formData.append("foto", base64);
+fetch(API_URL, {
+method: "POST",
+body: formData
 })
 .then(res=>res.text())
 .then(text=>{
-
 var data = JSON.parse(text);
-
 if(data.success){
-
-document.getElementById("hasilLapor").innerHTML=
+document.getElementById("hasilLapor").innerHTML =
 "<span class='success'>Laporan berhasil<br>Ticket ID: "+data.ticket+"</span>";
-
 }else{
-
-document.getElementById("hasilLapor").innerHTML=
-"<span class='error'>Gagal kirim laporan</span>";
-
+document.getElementById("hasilLapor").innerHTML =
+"<span class='error'>Gagal kirim laporan: "+data.error+"</span>";
 }
-
 })
 .catch(err=>{
-
-document.getElementById("hasilLapor").innerHTML=
+document.getElementById("hasilLapor").innerHTML =
 "<span class='error'>Error koneksi server</span>";
-
 });
-
 };
-
 reader.readAsDataURL(file);
-
 }
 
 </script>
 
 </body>
 </html>
+
 
 
 
