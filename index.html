@@ -141,8 +141,29 @@ document.getElementById("hasil").innerHTML="Loading...";
 var url = "https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec?ticket=" + ticket;
 
 fetch(url)
-.then(res=>res.json())
-.then(data=>{
+.then(res=>res.text())
+.then(text=>{
+
+var data = JSON.parse(text);
+
+if(data.success){
+
+document.getElementById("hasilLapor").innerHTML =
+"Laporan berhasil. Ticket ID: " + data.ticket;
+
+} else {
+
+document.getElementById("hasilLapor").innerHTML =
+"Gagal kirim: " + data.error;
+
+}
+
+})
+.catch(err=>{
+document.getElementById("hasilLapor").innerHTML =
+"Error koneksi server";
+});
+
 
 if(data.error){
 
@@ -238,3 +259,4 @@ reader.readAsDataURL(file);
 
 </body>
 </html>
+
