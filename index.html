@@ -13,12 +13,12 @@ body {
   background-color: white;
   width: 400px;
   margin: auto;
-  padding: 20px;
+  padding: 25px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
 }
 input {
-  width: 80%;
+  width: 90%;
   padding: 10px;
   margin-top: 10px;
   font-size: 16px;
@@ -35,6 +35,9 @@ button {
 button:hover {
   background-color: #0d47a1;
 }
+.status-open { color:red; font-weight:bold; }
+.status-progress { color:orange; font-weight:bold; }
+.status-done { color:green; font-weight:bold; }
 #hasil {
   margin-top: 20px;
   text-align: left;
@@ -52,6 +55,13 @@ button:hover {
 <script>
 function cekStatus(){
 var ticket = document.getElementById("ticket").value;
+if(ticket==""){
+document.getElementById("hasil").innerHTML =
+"<p style='color:red'>Masukkan Ticket ID terlebih dahulu</p>";
+return;
+}
+document.getElementById("hasil").innerHTML =
+"<p>Loading...</p>";
 var url = "https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec?ticket=" + ticket;
 fetch(url)
 .then(response => response.json())
@@ -61,12 +71,19 @@ document.getElementById("hasil").innerHTML =
 "<p style='color:red'>Ticket tidak ditemukan</p>";
 }
 else{
+var statusClass = "";
+if(data.status=="Open")
+statusClass="status-open";
+else if(data.status=="In Progress")
+statusClass="status-progress";
+else if(data.status=="Completed")
+statusClass="status-done";
 document.getElementById("hasil").innerHTML =
 "<b>Ticket ID:</b> " + data.ticket + "<br><br>" +
 "<b>Nama Pelapor:</b> " + data.nama + "<br><br>" +
 "<b>Cabang:</b> " + data.cabang + "<br><br>" +
 "<b>Nama Aset:</b> " + data.aset + "<br><br>" +
-"<b>Status:</b> " + data.status + "<br><br>" +
+"<b>Status:</b> <span class='"+statusClass+"'>" + data.status + "</span><br><br>" +
 "<b>Vendor:</b> " + data.vendor + "<br><br>" +
 "<b>Catatan GA:</b> " + data.catatan + "<br><br>" +
 "<b>Estimasi Selesai:</b> " + data.estimasi;
