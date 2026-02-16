@@ -1,60 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Portal Maintenance Aset - Toko Cat Utama</title>
+<title>Portal Maintenance Aset</title>
 
 <style>
 
 body {
-  font-family: Arial;
-  background-color: #f4f6f8;
-  text-align: center;
-  padding-top: 50px;
+font-family: Arial;
+background-color: #f4f6f8;
+text-align: center;
+padding-top: 50px;
 }
 
 .container {
-  background-color: white;
-  width: 420px;
-  margin: auto;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+background-color: white;
+width: 420px;
+margin: auto;
+padding: 25px;
+border-radius: 10px;
+box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
 }
 
 .menu button {
-  margin: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
+margin: 5px;
+padding: 10px 15px;
+cursor: pointer;
+background-color:#1976d2;
+color:white;
+border:none;
+}
+
+.menu button:hover {
+background-color:#0d47a1;
 }
 
 input, textarea {
-  width: 90%;
-  padding: 10px;
-  margin-top: 10px;
-}
-
-button {
-  background-color: #1976d2;
-  color: white;
-  border: none;
-}
-
-button:hover {
-  background-color: #0d47a1;
+width: 90%;
+padding: 10px;
+margin-top: 10px;
 }
 
 .hidden {
-  display:none;
+display:none;
 }
 
 #hasil, #hasilLapor {
-  margin-top: 15px;
-  text-align:left;
+margin-top: 15px;
+text-align:left;
 }
 
-.status-open { color:red; font-weight:bold; }
-.status-progress { color:orange; font-weight:bold; }
-.status-done { color:green; font-weight:bold; }
+.success {
+color:green;
+font-weight:bold;
+}
+
+.error {
+color:red;
+font-weight:bold;
+}
 
 </style>
 
@@ -75,11 +78,11 @@ button:hover {
 
 <!-- CEK STATUS -->
 
-<div id="cek">
+<div id="cekSection">
 
 <input type="text" id="ticket" placeholder="Masukkan Ticket ID">
 
-<br>
+<br><br>
 
 <button onclick="cekStatus()">CEK</button>
 
@@ -89,7 +92,7 @@ button:hover {
 
 <!-- LAPOR -->
 
-<div id="lapor" class="hidden">
+<div id="laporSection" class="hidden">
 
 <input type="text" id="nama" placeholder="Nama Pelapor">
 
@@ -97,13 +100,13 @@ button:hover {
 
 <input type="text" id="aset" placeholder="Nama Aset">
 
-<textarea id="deskripsi" placeholder="Deskripsi"></textarea>
+<textarea id="deskripsi" placeholder="Deskripsi Kerusakan"></textarea>
 
 <input type="file" id="foto">
 
-<br>
+<br><br>
 
-<button onclick="kirim()">KIRIM LAPORAN</button>
+<button onclick="kirimLaporan()">KIRIM LAPORAN</button>
 
 <div id="hasilLapor"></div>
 
@@ -113,88 +116,52 @@ button:hover {
 
 <script>
 
+var API_URL = "https://script.google.com/macros/s/AKfycbxbmP2nn9OL7tfQ7k-qoYqHO-7E56U-mTVFe9JL9h0ioYdaNzisA9su6wfw5Pj2C1wW9g/exec";
+
 function showCek(){
 
-document.getElementById("cek").classList.remove("hidden");
-document.getElementById("lapor").classList.add("hidden");
+document.getElementById("cekSection").classList.remove("hidden");
+document.getElementById("laporSection").classList.add("hidden");
 
 }
 
 function showLapor(){
 
-document.getElementById("lapor").classList.remove("hidden");
-document.getElementById("cek").classList.add("hidden");
+document.getElementById("laporSection").classList.remove("hidden");
+document.getElementById("cekSection").classList.add("hidden");
 
 }
 
 function cekStatus(){
 
-var ticket = document.getElementById("ticket").value;
+var ticket=document.getElementById("ticket").value;
 
 if(ticket==""){
-document.getElementById("hasil").innerHTML="Masukkan Ticket ID";
+document.getElementById("hasil").innerHTML="<span class='error'>Masukkan Ticket ID</span>";
 return;
 }
 
 document.getElementById("hasil").innerHTML="Loading...";
 
-var url = "https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec?ticket=" + ticket;
-
-fetch(https://script.google.com/macros/s/AKfycbxbmP2nn9OL7tfQ7k-qoYqHO-7E56U-mTVFe9JL9h0ioYdaNzisA9su6wfw5Pj2C1wW9g/exec)
-.then(res=>res.text())
-.then(text=>{
-
-var data = JSON.parse(text);
-
-if(data.success){
-
-document.getElementById("hasilLapor").innerHTML =
-"Laporan berhasil. Ticket ID: " + data.ticket;
-
-} else {
-
-document.getElementById("hasilLapor").innerHTML =
-"Gagal kirim: " + data.error;
-
-}
-
-})
-.catch(err=>{
-document.getElementById("hasilLapor").innerHTML =
-"Error koneksi server";
-});
-
+fetch(API_URL+"?ticket="+ticket)
+.then(res=>res.json())
+.then(data=>{
 
 if(data.error){
 
-document.getElementById("hasil").innerHTML="Ticket tidak ditemukan";
+document.getElementById("hasil").innerHTML="<span class='error'>Ticket tidak ditemukan</span>";
 
-}
-else{
-
-var statusClass="";
-
-if(data.status=="Open") statusClass="status-open";
-else if(data.status=="In Progress") statusClass="status-progress";
-else if(data.status=="Completed") statusClass="status-done";
+}else{
 
 document.getElementById("hasil").innerHTML=
 
-"<b>Ticket ID:</b> "+data.ticket+"<br><br>"+
-
+"<b>Ticket:</b> "+data.ticket+"<br><br>"+
 "<b>Nama:</b> "+data.nama+"<br><br>"+
-
 "<b>Cabang:</b> "+data.cabang+"<br><br>"+
-
 "<b>Aset:</b> "+data.aset+"<br><br>"+
-
-"<b>Status:</b> <span class='"+statusClass+"'>"+data.status+"</span><br><br>"+
-
+"<b>Status:</b> "+data.status+"<br><br>"+
 "<b>Vendor:</b> "+data.vendor+"<br><br>"+
-
-"<b>Catatan:</b> "+data.catatan+"<br><br>"+
-
-"<b>Estimasi:</b> "+data.estimasi;
+"<b>Catatan:</b> "+data.catatan;
 
 }
 
@@ -202,7 +169,7 @@ document.getElementById("hasil").innerHTML=
 
 }
 
-function kirim(){
+function kirimLaporan(){
 
 var nama=document.getElementById("nama").value;
 var cabang=document.getElementById("cabang").value;
@@ -213,12 +180,12 @@ var file=document.getElementById("foto").files[0];
 
 if(!nama||!cabang||!aset||!deskripsi||!file){
 
-document.getElementById("hasilLapor").innerHTML="Lengkapi semua data";
+document.getElementById("hasilLapor").innerHTML="<span class='error'>Lengkapi semua data</span>";
 return;
 
 }
 
-document.getElementById("hasilLapor").innerHTML="Mengirim...";
+document.getElementById("hasilLapor").innerHTML="Mengirim laporan...";
 
 var reader=new FileReader();
 
@@ -226,7 +193,7 @@ reader.onload=function(){
 
 var base64=reader.result.split(',')[1];
 
-fetch("https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec",{
+fetch(API_URL,{
 
 method:"POST",
 
@@ -244,8 +211,23 @@ foto:base64
 .then(res=>res.json())
 .then(data=>{
 
+if(data.success){
+
 document.getElementById("hasilLapor").innerHTML=
-"Laporan berhasil. Ticket ID: "+data.ticket;
+"<span class='success'>Laporan berhasil<br>Ticket ID: "+data.ticket+"</span>";
+
+}else{
+
+document.getElementById("hasilLapor").innerHTML=
+"<span class='error'>Gagal kirim laporan</span>";
+
+}
+
+})
+.catch(err=>{
+
+document.getElementById("hasilLapor").innerHTML=
+"<span class='error'>Error koneksi server</span>";
 
 });
 
@@ -259,5 +241,3 @@ reader.readAsDataURL(file);
 
 </body>
 </html>
-
-
