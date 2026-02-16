@@ -195,8 +195,10 @@ foto:base64
 })
 
 })
-.then(res=>res.json())
-.then(data=>{
+.then(res=>res.text())
+.then(text=>{
+
+var data = JSON.parse(text);
 
 if(data.success){
 
@@ -228,6 +230,7 @@ reader.readAsDataURL(file);
 
 </body>
 </html>
+
 
 
 
