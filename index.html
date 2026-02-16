@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Portal Maintenance Aset - Toko Cat Utama</title>
+<style>
+body {
+  font-family: Arial;
+  background-color: #f4f6f8;
+  text-align: center;
+  padding-top: 50px;
+}
+.container {
+  background-color: white;
+  width: 400px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+input {
+  width: 80%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+}
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0d47a1;
+}
+#hasil {
+  margin-top: 20px;
+  text-align: left;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>PORTAL CEK STATUS<br>MAINTENANCE ASET</h2>
+<input type="text" id="ticket" placeholder="Masukkan Ticket ID">
+<br>
+<button onclick="cekStatus()">CEK STATUS</button>
+<div id="hasil"></div>
+</div>
+<script>
+function cekStatus(){
+var ticket = document.getElementById("ticket").value;
+var url = "https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec?ticket=" + ticket;
+fetch(url)
+.then(response => response.json())
+.then(data => {
+if(data.error){
+document.getElementById("hasil").innerHTML =
+"<p style='color:red'>Ticket tidak ditemukan</p>";
+}
+else{
+document.getElementById("hasil").innerHTML =
+"<b>Ticket ID:</b> " + data.ticket + "<br><br>" +
+"<b>Nama Pelapor:</b> " + data.nama + "<br><br>" +
+"<b>Cabang:</b> " + data.cabang + "<br><br>" +
+"<b>Nama Aset:</b> " + data.aset + "<br><br>" +
+"<b>Status:</b> " + data.status + "<br><br>" +
+"<b>Vendor:</b> " + data.vendor + "<br><br>" +
+"<b>Catatan GA:</b> " + data.catatan + "<br><br>" +
+"<b>Estimasi Selesai:</b> " + data.estimasi;
+}
+});
+}
+</script>
+</body>
+</html>
