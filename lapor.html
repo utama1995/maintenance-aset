@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Lapor Kerusakan</title>
+</head>
+<body>
+<h2>LAPOR KERUSAKAN ASET</h2>
+<input type="text" id="nama" placeholder="Nama Pelapor"><br><br>
+<input type="text" id="cabang" placeholder="Cabang"><br><br>
+<input type="text" id="aset" placeholder="Nama Aset"><br><br>
+<textarea id="deskripsi" placeholder="Deskripsi"></textarea><br><br>
+<input type="file" id="foto"><br><br>
+<button onclick="kirim()">Kirim Laporan</button>
+<p id="hasil"></p>
+<script>
+function kirim(){
+var file = document.getElementById("foto").files[0];
+var reader = new FileReader();
+reader.onload = function(){
+var base64 = reader.result.split(',')[1];
+fetch("https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec", {
+method:"POST",
+body:new URLSearchParams({
+nama:document.getElementById("nama").value,
+cabang:document.getElementById("cabang").value,
+aset:document.getElementById("aset").value,
+deskripsi:document.getElementById("deskripsi").value,
+foto:base64
+})
+})
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("hasil").innerHTML =
+"Laporan berhasil. Ticket ID: " + data.ticket;
+});
+};
+reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>
