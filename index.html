@@ -2,94 +2,239 @@
 <html>
 <head>
 <title>Portal Maintenance Aset - Toko Cat Utama</title>
+
 <style>
+
 body {
   font-family: Arial;
   background-color: #f4f6f8;
   text-align: center;
   padding-top: 50px;
 }
+
 .container {
   background-color: white;
-  width: 400px;
+  width: 420px;
   margin: auto;
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
 }
-input {
+
+.menu button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+input, textarea {
   width: 90%;
   padding: 10px;
   margin-top: 10px;
-  font-size: 16px;
 }
+
 button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
   background-color: #1976d2;
   color: white;
   border: none;
-  cursor: pointer;
 }
+
 button:hover {
   background-color: #0d47a1;
 }
+
+.hidden {
+  display:none;
+}
+
+#hasil, #hasilLapor {
+  margin-top: 15px;
+  text-align:left;
+}
+
 .status-open { color:red; font-weight:bold; }
 .status-progress { color:orange; font-weight:bold; }
 .status-done { color:green; font-weight:bold; }
-#hasil {
-  margin-top: 20px;
-  text-align: left;
-}
+
 </style>
+
 </head>
+
 <body>
+
 <div class="container">
-<h2>PORTAL CEK STATUS<br>MAINTENANCE ASET</h2>
-<input type="text" id="ticket" placeholder="Masukkan Ticket ID">
-<br>
-<button onclick="cekStatus()">CEK STATUS</button>
-<div id="hasil"></div>
+
+<h2>PORTAL MAINTENANCE ASET</h2>
+
+<div class="menu">
+
+<button onclick="showCek()">CEK STATUS</button>
+<button onclick="showLapor()">LAPOR KERUSAKAN</button>
+
 </div>
+
+<!-- CEK STATUS -->
+
+<div id="cek">
+
+<input type="text" id="ticket" placeholder="Masukkan Ticket ID">
+
+<br>
+
+<button onclick="cekStatus()">CEK</button>
+
+<div id="hasil"></div>
+
+</div>
+
+<!-- LAPOR -->
+
+<div id="lapor" class="hidden">
+
+<input type="text" id="nama" placeholder="Nama Pelapor">
+
+<input type="text" id="cabang" placeholder="Cabang">
+
+<input type="text" id="aset" placeholder="Nama Aset">
+
+<textarea id="deskripsi" placeholder="Deskripsi"></textarea>
+
+<input type="file" id="foto">
+
+<br>
+
+<button onclick="kirim()">KIRIM LAPORAN</button>
+
+<div id="hasilLapor"></div>
+
+</div>
+
+</div>
+
 <script>
+
+function showCek(){
+
+document.getElementById("cek").classList.remove("hidden");
+document.getElementById("lapor").classList.add("hidden");
+
+}
+
+function showLapor(){
+
+document.getElementById("lapor").classList.remove("hidden");
+document.getElementById("cek").classList.add("hidden");
+
+}
+
 function cekStatus(){
+
 var ticket = document.getElementById("ticket").value;
+
 if(ticket==""){
-document.getElementById("hasil").innerHTML =
-"<p style='color:red'>Masukkan Ticket ID terlebih dahulu</p>";
+document.getElementById("hasil").innerHTML="Masukkan Ticket ID";
 return;
 }
-document.getElementById("hasil").innerHTML =
-"<p>Loading...</p>";
+
+document.getElementById("hasil").innerHTML="Loading...";
+
 var url = "https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec?ticket=" + ticket;
+
 fetch(url)
-.then(response => response.json())
-.then(data => {
+.then(res=>res.json())
+.then(data=>{
+
 if(data.error){
-document.getElementById("hasil").innerHTML =
-"<p style='color:red'>Ticket tidak ditemukan</p>";
+
+document.getElementById("hasil").innerHTML="Ticket tidak ditemukan";
+
 }
 else{
-var statusClass = "";
-if(data.status=="Open")
-statusClass="status-open";
-else if(data.status=="In Progress")
-statusClass="status-progress";
-else if(data.status=="Completed")
-statusClass="status-done";
-document.getElementById("hasil").innerHTML =
-"<b>Ticket ID:</b> " + data.ticket + "<br><br>" +
-"<b>Nama Pelapor:</b> " + data.nama + "<br><br>" +
-"<b>Cabang:</b> " + data.cabang + "<br><br>" +
-"<b>Nama Aset:</b> " + data.aset + "<br><br>" +
-"<b>Status:</b> <span class='"+statusClass+"'>" + data.status + "</span><br><br>" +
-"<b>Vendor:</b> " + data.vendor + "<br><br>" +
-"<b>Catatan GA:</b> " + data.catatan + "<br><br>" +
-"<b>Estimasi Selesai:</b> " + data.estimasi;
+
+var statusClass="";
+
+if(data.status=="Open") statusClass="status-open";
+else if(data.status=="In Progress") statusClass="status-progress";
+else if(data.status=="Completed") statusClass="status-done";
+
+document.getElementById("hasil").innerHTML=
+
+"<b>Ticket ID:</b> "+data.ticket+"<br><br>"+
+
+"<b>Nama:</b> "+data.nama+"<br><br>"+
+
+"<b>Cabang:</b> "+data.cabang+"<br><br>"+
+
+"<b>Aset:</b> "+data.aset+"<br><br>"+
+
+"<b>Status:</b> <span class='"+statusClass+"'>"+data.status+"</span><br><br>"+
+
+"<b>Vendor:</b> "+data.vendor+"<br><br>"+
+
+"<b>Catatan:</b> "+data.catatan+"<br><br>"+
+
+"<b>Estimasi:</b> "+data.estimasi;
+
 }
+
 });
+
 }
+
+function kirim(){
+
+var nama=document.getElementById("nama").value;
+var cabang=document.getElementById("cabang").value;
+var aset=document.getElementById("aset").value;
+var deskripsi=document.getElementById("deskripsi").value;
+
+var file=document.getElementById("foto").files[0];
+
+if(!nama||!cabang||!aset||!deskripsi||!file){
+
+document.getElementById("hasilLapor").innerHTML="Lengkapi semua data";
+return;
+
+}
+
+document.getElementById("hasilLapor").innerHTML="Mengirim...";
+
+var reader=new FileReader();
+
+reader.onload=function(){
+
+var base64=reader.result.split(',')[1];
+
+fetch("https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec",{
+
+method:"POST",
+
+body:new URLSearchParams({
+
+nama:nama,
+cabang:cabang,
+aset:aset,
+deskripsi:deskripsi,
+foto:base64
+
+})
+
+})
+.then(res=>res.json())
+.then(data=>{
+
+document.getElementById("hasilLapor").innerHTML=
+"Laporan berhasil. Ticket ID: "+data.ticket;
+
+});
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
 </script>
+
 </body>
 </html>
