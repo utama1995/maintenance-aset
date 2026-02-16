@@ -1,41 +1,144 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Lapor Kerusakan</title>
+<title>Lapor Kerusakan Aset - Toko Cat Utama</title>
+
+<style>
+
+body {
+  font-family: Arial;
+  background-color: #f4f6f8;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.container {
+  background-color: white;
+  width: 400px;
+  margin: auto;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+
+input, textarea {
+  width: 90%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0d47a1;
+}
+
+#hasil {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+</style>
+
 </head>
+
 <body>
+
+<div class="container">
+
 <h2>LAPOR KERUSAKAN ASET</h2>
-<input type="text" id="nama" placeholder="Nama Pelapor"><br><br>
-<input type="text" id="cabang" placeholder="Cabang"><br><br>
-<input type="text" id="aset" placeholder="Nama Aset"><br><br>
-<textarea id="deskripsi" placeholder="Deskripsi"></textarea><br><br>
-<input type="file" id="foto"><br><br>
-<button onclick="kirim()">Kirim Laporan</button>
-<p id="hasil"></p>
+
+<input type="text" id="nama" placeholder="Nama Pelapor">
+
+<input type="text" id="cabang" placeholder="Cabang">
+
+<input type="text" id="aset" placeholder="Nama Aset">
+
+<textarea id="deskripsi" placeholder="Deskripsi Kerusakan"></textarea>
+
+<input type="file" id="foto">
+
+<br>
+
+<button onclick="kirim()">KIRIM LAPORAN</button>
+
+<div id="hasil"></div>
+
+</div>
+
 <script>
+
 function kirim(){
+
+var nama = document.getElementById("nama").value;
+var cabang = document.getElementById("cabang").value;
+var aset = document.getElementById("aset").value;
+var deskripsi = document.getElementById("deskripsi").value;
+
 var file = document.getElementById("foto").files[0];
+
+if(!nama || !cabang || !aset || !deskripsi || !file){
+
+document.getElementById("hasil").innerHTML =
+"<span style='color:red'>Lengkapi semua data terlebih dahulu</span>";
+
+return;
+
+}
+
+document.getElementById("hasil").innerHTML = "Mengirim laporan...";
+
 var reader = new FileReader();
+
 reader.onload = function(){
+
 var base64 = reader.result.split(',')[1];
+
 fetch("https://script.google.com/macros/s/AKfycbx-W5osk5kYMT0f-30imHGmWQRwoOOLVmppuAspBGtdfqHPZsXJyKNwaiHeM48w4aHwzg/exec", {
+
 method:"POST",
+
 body:new URLSearchParams({
-nama:document.getElementById("nama").value,
-cabang:document.getElementById("cabang").value,
-aset:document.getElementById("aset").value,
-deskripsi:document.getElementById("deskripsi").value,
+
+nama:nama,
+cabang:cabang,
+aset:aset,
+deskripsi:deskripsi,
 foto:base64
+
 })
+
 })
 .then(res=>res.json())
 .then(data=>{
+
 document.getElementById("hasil").innerHTML =
-"Laporan berhasil. Ticket ID: " + data.ticket;
+"<span style='color:green'>Laporan berhasil dikirim<br>Ticket ID: "+data.ticket+"</span>";
+
+document.getElementById("nama").value="";
+document.getElementById("cabang").value="";
+document.getElementById("aset").value="";
+document.getElementById("deskripsi").value="";
+document.getElementById("foto").value="";
+
 });
+
 };
+
 reader.readAsDataURL(file);
+
 }
+
 </script>
+
 </body>
 </html>
