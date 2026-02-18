@@ -1,4 +1,4 @@
-const API_URL = "PASTE_WEB_APP_URL_DISINI";
+const API_URL = "https://script.google.com/macros/s/AKfycbzLmDzXPGRK8P6uFeP3UgVrFwidcqlfGCHgloE21CKYYgJPSSOLywLdTF8d6v5MOmOB/exec";
 window.onload = function(){
 loadTickets();
 };
