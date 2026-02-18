@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ADMIN GA - Maintenance Aset</title>
+<style>
+body{
+font-family:Arial;
+background:#f4f6f8;
+}
+.container{
+width:1000px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:8px;
+}
+table{
+width:100%;
+border-collapse:collapse;
+}
+th,td{
+border:1px solid #ccc;
+padding:8px;
+text-align:left;
+}
+button{
+padding:5px 10px;
+cursor:pointer;
+}
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+}
+.modal-content{
+background:white;
+width:500px;
+margin:100px auto;
+padding:20px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>ADMIN GA - Maintenance Aset</h2>
+<table id="ticketTable">
+<thead>
+<tr>
+<th>Ticket</th>
+<th>Cabang</th>
+<th>Aset</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3>Edit Ticket</h3>
+<input type="hidden" id="ticket_id">
+Status:
+<select id="status">
+<option>Open</option>
+<option>Verified</option>
+<option>On Progress</option>
+<option>Waiting Vendor</option>
+<option>Done</option>
+<option>Cancel</option>
+</select>
+<br><br>
+Vendor:
+<input type="text" id="vendor">
+<br><br>
+Estimasi:
+<input type="date" id="estimasi">
+<br><br>
+Catatan:
+<textarea id="catatan"></textarea>
+<br><br>
+<button onclick="updateTicket()">SAVE</button>
+<button onclick="closeModal()">CLOSE</button>
+</div>
+</div>
+<script src="admin.js"></script>
+</body>
+</html>
