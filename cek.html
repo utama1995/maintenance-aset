@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Cek Status</title>
+<title>Cek Status Maintenance</title>
 
 <style>
 
@@ -12,21 +12,75 @@ background:#f4f6f8;
 }
 
 .container{
-width:400px;
+width:500px;
 margin:50px auto;
 background:white;
-padding:20px;
+padding:25px;
 border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+box-sizing:border-box;
 }
 
 button{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
 background:#1976d2;
 color:white;
 border:none;
 cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#0d47a1;
+}
+
+.result{
+margin-top:20px;
+padding:15px;
+background:#f9f9f9;
+border-radius:8px;
+}
+
+.label{
+font-weight:bold;
+}
+
+.value{
+margin-bottom:8px;
+}
+
+.status-open{
+color:orange;
+font-weight:bold;
+}
+
+.status-progress{
+color:blue;
+font-weight:bold;
+}
+
+.status-done{
+color:green;
+font-weight:bold;
+}
+
+img{
+margin-top:10px;
+max-width:100%;
+border-radius:8px;
+}
+
+a{
+display:block;
+margin-top:15px;
 }
 
 </style>
@@ -37,17 +91,15 @@ cursor:pointer;
 
 <div class="container">
 
-<h2>CEK STATUS</h2>
+<h2>CEK STATUS LAPORAN</h2>
 
 <input type="text" id="ticket" placeholder="Masukkan Ticket ID">
 
-<button onclick="cekStatus()">CEK</button>
+<button onclick="cekStatus()">CEK STATUS</button>
 
-<div id="hasil"></div>
+<div id="hasil" class="result"></div>
 
-<br>
-
-<a href="index.html">Kembali</a>
+<a href="index.html">← Kembali</a>
 
 </div>
 
