@@ -116,7 +116,27 @@ font-weight:bold;
 
 <script>
 
-var API_URL = "https://script.google.com/macros/s/AKfycbwolLF01_S50T9famAZYQqoPCED-k-mk69m64kHV74YOENluGDLpi0bBoruhQ8Q9NapbA/exec";
+var API_URL = "https://script.google.com/macros/s/XXXX/exec";
+
+async function uploadFotoCloudinary(file){
+
+var url = "https://api.cloudinary.com/v1_1/db00zaan0/image/upload";
+
+var formData = new FormData();
+
+formData.append("file", file);
+formData.append("upload_preset", "maintenance_upload");
+
+var response = await fetch(url,{
+method:"POST",
+body:formData
+});
+
+var data = await response.json();
+
+return data.secure_url;
+
+}
 
 function showCek(){
 
@@ -156,48 +176,50 @@ document.getElementById("hasil").innerHTML=
 document.getElementById("hasil").innerHTML="Error koneksi server";
 });
 }
-function kirimLaporan(){
+
+async function kirimLaporan(){
+
 var nama = document.getElementById("nama").value;
 var cabang = document.getElementById("cabang").value;
 var aset = document.getElementById("aset").value;
 var deskripsi = document.getElementById("deskripsi").value;
-var fileInput = document.getElementById("foto");
-if(!fileInput.files.length){
-document.getElementById("hasilLapor").innerHTML =
-"<span class='error'>Pilih foto dulu</span>";
-return;
-}
-var file = fileInput.files[0];
-var reader = new FileReader();
-reader.onload = function(e){
-var base64 = e.target.result.split(',')[1];
+var file = document.getElementById("foto").files[0];
+
+document.getElementById("hasilLapor").innerHTML="Upload foto...";
+
+var fotoURL = await uploadFotoCloudinary(file);
+
 var formData = new FormData();
+
 formData.append("nama", nama);
 formData.append("cabang", cabang);
 formData.append("aset", aset);
 formData.append("deskripsi", deskripsi);
-formData.append("foto", base64);
+formData.append("foto", fotoURL);
+
 fetch(API_URL,{
 method:"POST",
 body:formData
 })
-.then(response => response.json())
-.then(data => {
+.then(res=>res.json())
+.then(data=>{
+
 if(data.success){
+
 document.getElementById("hasilLapor").innerHTML =
-"<span style='color:green'>Berhasil. Ticket ID: "+data.ticket+"</span>";
+"Berhasil. Ticket ID: "+data.ticket;
+
 }else{
+
 document.getElementById("hasilLapor").innerHTML =
-"<span class='error'>Error: "+data.error+"</span>";
+"Gagal kirim laporan";
+
 }
-})
-.catch(error=>{
-document.getElementById("hasilLapor").innerHTML =
-"<span class='error'>Koneksi gagal</span>";
+
 });
-};
-reader.readAsDataURL(file);
+
 }
+
 
 </script>
 
@@ -205,5 +227,6 @@ reader.readAsDataURL(file);
 </html>
 
 <!-- refresh -->
+
 
 
