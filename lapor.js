@@ -95,6 +95,8 @@ formData.append("cabang", cabang);
 
 formData.append("aset", aset);
 
+formData.append("kategori", kategori);
+
 formData.append("deskripsi", deskripsi);
 
 formData.append("foto", fotoURL);
