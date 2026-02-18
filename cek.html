@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cek Status Maintenance Aset</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6f8;
+}
+
+.container{
+width:500px;
+margin:50px auto;
+background:white;
+padding:20px;
+border-radius:8px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input{
+width:100%;
+padding:8px;
+margin-top:10px;
+}
+
+button{
+margin-top:10px;
+padding:10px;
+width:100%;
+background:#007bff;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.result{
+margin-top:20px;
+padding:10px;
+background:#f9f9f9;
+border-radius:5px;
+}
+
+img{
+max-width:100%;
+margin-top:10px;
+border-radius:5px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>CEK STATUS TIKET</h2>
+
+<input type="text" id="ticket_id" placeholder="Masukkan Ticket ID">
+
+<button onclick="cekTicket()">CEK STATUS</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<script src="cek.js"></script>
+
+</body>
+</html>
