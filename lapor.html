@@ -1,3 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Lapor Kerusakan</title>
+
+<style>
+
+body {
+font-family: Arial;
+background-color: #f4f6f8;
+}
+
+.container {
+background-color: white;
+width: 420px;
+margin: 60px auto;
+padding: 25px;
+border-radius: 10px;
+box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+
+input, textarea {
+width: 100%;
+padding: 10px;
+margin-top: 10px;
+box-sizing: border-box;
+}
+
+button {
+width: 100%;
+padding: 12px;
+margin-top: 15px;
+background-color:#1976d2;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+button:hover {
+background-color:#0d47a1;
+}
+
+#hasil {
+margin-top:15px;
+}
+
+a {
+display:block;
+margin-top:15px;
+text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>LAPOR KERUSAKAN</h2>
+
 <form id="formLapor">
 
 <input type="text" id="nama" placeholder="Nama Pelapor">
@@ -6,14 +69,24 @@
 
 <input type="text" id="aset" placeholder="Nama Aset">
 
-<textarea id="deskripsi"></textarea>
+<textarea id="deskripsi" placeholder="Deskripsi Kerusakan"></textarea>
 
 <input type="file" id="foto">
 
 <button type="button" onclick="kirimLaporan()">
-KIRIM
+KIRIM LAPORAN
 </button>
 
 </form>
 
 <div id="hasil"></div>
+
+<a href="index.html">← Kembali ke Menu</a>
+
+</div>
+
+<script src="config.js"></script>
+<script src="lapor.js"></script>
+
+</body>
+</html>
