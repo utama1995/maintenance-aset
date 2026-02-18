@@ -54,13 +54,16 @@ document.getElementById("cabang").value;
 const aset =
 document.getElementById("aset").value;
 
+const kategori =
+document.getElementById("kategori").value;
+
 const deskripsi =
 document.getElementById("deskripsi").value;
 
 const file =
 document.getElementById("foto").files[0];
 
-if(!nama || !cabang || !aset || !deskripsi){
+if(!nama || !cabang || !aset || !kategori || !deskripsi){
 
 alert("Semua field wajib diisi");
 
