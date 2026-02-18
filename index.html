@@ -1,62 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Portal Maintenance Aset</title>
 
 <style>
 
-body {
-font-family: Arial;
-background-color: #f4f6f8;
-text-align: center;
-padding-top: 50px;
+body{
+font-family:Arial;
+background:#f4f6f8;
+text-align:center;
+padding-top:100px;
 }
 
-.container {
-background-color: white;
-width: 420px;
-margin: auto;
-padding: 25px;
-border-radius: 10px;
-box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+.container{
+background:white;
+width:400px;
+margin:auto;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
-.menu button {
-margin: 5px;
-padding: 10px 15px;
-cursor: pointer;
-background-color:#1976d2;
+button{
+width:100%;
+padding:15px;
+margin-top:10px;
+background:#1976d2;
 color:white;
 border:none;
+cursor:pointer;
+font-size:16px;
 }
 
-.menu button:hover {
-background-color:#0d47a1;
-}
-
-input, textarea {
-width: 90%;
-padding: 10px;
-margin-top: 10px;
-}
-
-.hidden {
-display:none;
-}
-
-#hasil, #hasilLapor {
-margin-top: 15px;
-text-align:left;
-}
-
-.success {
-color:green;
-font-weight:bold;
-}
-
-.error {
-color:red;
-font-weight:bold;
+button:hover{
+background:#0d47a1;
 }
 
 </style>
@@ -69,171 +47,19 @@ font-weight:bold;
 
 <h2>PORTAL MAINTENANCE ASET</h2>
 
-<div class="menu">
+<a href="lapor.html">
+<button>LAPOR KERUSAKAN</button>
+</a>
 
-<button onclick="showCek()">CEK STATUS</button>
-<button onclick="showLapor()">LAPOR KERUSAKAN</button>
 <a href="cek.html">
 <button>CEK STATUS</button>
 </a>
 
+<a href="admin.html">
+<button>ADMIN GA</button>
+</a>
 
 </div>
-
-<!-- CEK STATUS -->
-
-<div id="cekSection">
-
-<input type="text" id="ticket" placeholder="Masukkan Ticket ID">
-
-<br><br>
-
-<button onclick="cekStatus()">CEK</button>
-
-<div id="hasil"></div>
-
-</div>
-
-<!-- LAPOR -->
-
-<div id="laporSection" class="hidden">
-
-<input type="text" id="nama" placeholder="Nama Pelapor">
-
-<input type="text" id="cabang" placeholder="Cabang">
-
-<input type="text" id="aset" placeholder="Nama Aset">
-
-<textarea id="deskripsi" placeholder="Deskripsi Kerusakan"></textarea>
-
-<input type="file" id="foto">
-
-<br><br>
-
-<button onclick="kirimLaporan()">KIRIM LAPORAN</button>
-
-<div id="hasilLapor"></div>
-
-</div>
-
-</div>
-
-<script>
-
-var API_URL = "https://script.google.com/macros/s/AKfycbzLmDzXPGRK8P6uFeP3UgVrFwidcqlfGCHgloE21CKYYgJPSSOLywLdTF8d6v5MOmOB/exec";
-
-async function uploadFotoCloudinary(file){
-
-var url = "https://api.cloudinary.com/v1_1/db00zaan0/image/upload";
-
-var formData = new FormData();
-
-formData.append("file", file);
-formData.append("upload_preset", "maintenance_upload");
-
-var response = await fetch(url,{
-method:"POST",
-body:formData
-});
-
-var data = await response.json();
-
-return data.secure_url;
-
-}
-
-function showCek(){
-
-document.getElementById("cekSection").classList.remove("hidden");
-document.getElementById("laporSection").classList.add("hidden");
-
-}
-
-function showLapor(){
-
-document.getElementById("laporSection").classList.remove("hidden");
-document.getElementById("cekSection").classList.add("hidden");
-
-}
-
-function cekStatus(){
-var ticket=document.getElementById("ticket").value;
-document.getElementById("hasil").innerHTML="Loading...";
-fetch(API_URL+"?ticket="+ticket)
-.then(response=>response.text())
-.then(text=>{
-var data=JSON.parse(text);
-if(data.error){
-document.getElementById("hasil").innerHTML="Ticket tidak ditemukan";
-}else{
-document.getElementById("hasil").innerHTML=
-"<b>Ticket:</b> "+data.ticket+"<br><br>"+
-"<b>Nama:</b> "+data.nama+"<br><br>"+
-"<b>Cabang:</b> "+data.cabang+"<br><br>"+
-"<b>Aset:</b> "+data.aset+"<br><br>"+
-"<b>Status:</b> "+data.status+"<br><br>"+
-"<b>Vendor:</b> "+data.vendor+"<br><br>"+
-"<b>Catatan:</b> "+data.catatan;
-}
-})
-.catch(err=>{
-document.getElementById("hasil").innerHTML="Error koneksi server";
-});
-}
-
-async function kirimLaporan(){
-
-var nama = document.getElementById("nama").value;
-var cabang = document.getElementById("cabang").value;
-var aset = document.getElementById("aset").value;
-var deskripsi = document.getElementById("deskripsi").value;
-var file = document.getElementById("foto").files[0];
-
-document.getElementById("hasilLapor").innerHTML="Upload foto...";
-
-var fotoURL = await uploadFotoCloudinary(file);
-
-var formData = new FormData();
-
-formData.append("nama", nama);
-formData.append("cabang", cabang);
-formData.append("aset", aset);
-formData.append("deskripsi", deskripsi);
-formData.append("foto", fotoURL);
-
-fetch(API_URL,{
-method:"POST",
-body:formData
-})
-.then(res=>res.json())
-.then(data=>{
-
-if(data.success){
-
-document.getElementById("hasilLapor").innerHTML =
-"Berhasil. Ticket ID: "+data.ticket;
-
-}else{
-
-document.getElementById("hasilLapor").innerHTML =
-"Gagal kirim laporan";
-
-}
-
-});
-
-}
-
-
-</script>
 
 </body>
 </html>
-
-<!-- refresh -->
-
-
-
-
-
-
