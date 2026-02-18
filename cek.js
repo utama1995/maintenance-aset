@@ -2,30 +2,26 @@ function formatTanggalIndonesia(tanggalISO){
 
 if(!tanggalISO) return "-";
 
-const bulan = [
-"Januari",
-"Februari",
-"Maret",
-"April",
-"Mei",
-"Juni",
-"Juli",
-"Agustus",
-"September",
-"Oktober",
-"November",
-"Desember"
-];
+try{
 
-const d = new Date(tanggalISO);
+const tanggal = new Date(tanggalISO);
 
-const hari = d.getDate();
-const bulanNama = bulan[d.getMonth()];
-const tahun = d.getFullYear();
+if(isNaN(tanggal)) return tanggalISO;
 
-return `${hari} ${bulanNama} ${tahun}`;
+return tanggal.toLocaleDateString("id-ID", {
+day: "numeric",
+month: "long",
+year: "numeric"
+});
+
+}catch{
+
+return tanggalISO;
 
 }
+
+}
+
 
 function cekStatus(){
 
