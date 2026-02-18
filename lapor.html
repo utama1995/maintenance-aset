@@ -20,12 +20,17 @@ border-radius: 10px;
 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
 }
 
-input, textarea {
+input, textarea, select {
 width: 100%;
 padding: 10px;
 margin-top: 10px;
 box-sizing: border-box;
+font-size: 14px;
+border: 1px solid #ccc;
+border-radius: 4px;
+background-color: white;
 }
+
 
 button {
 width: 100%;
@@ -68,6 +73,11 @@ text-align:center;
 <input type="text" id="cabang" placeholder="Cabang">
 
 <input type="text" id="aset" placeholder="Nama Aset">
+
+<label style="margin-top:10px; display:block;">
+Kategori Aset
+</label>
+
 <select id="kategori">
 <option value="">Pilih Kategori Aset</option>
 <option value="Elektronik">Elektronik</option>
@@ -76,6 +86,7 @@ text-align:center;
 <option value="Kendaraan">Kendaraan</option>
 <option value="Bangunan">Bangunan</option>
 </select>
+
 
 <textarea id="deskripsi" placeholder="Deskripsi Kerusakan"></textarea>
 
@@ -111,5 +122,6 @@ border-radius:5px;
 
 </body>
 </html>
+
 
 
