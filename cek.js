@@ -1,3 +1,32 @@
+function formatTanggalIndonesia(tanggalISO){
+
+if(!tanggalISO) return "-";
+
+const bulan = [
+"Januari",
+"Februari",
+"Maret",
+"April",
+"Mei",
+"Juni",
+"Juli",
+"Agustus",
+"September",
+"Oktober",
+"November",
+"Desember"
+];
+
+const d = new Date(tanggalISO);
+
+const hari = d.getDate();
+const bulanNama = bulan[d.getMonth()];
+const tahun = d.getFullYear();
+
+return `${hari} ${bulanNama} ${tahun}`;
+
+}
+
 function cekStatus(){
 
 const ticket =
@@ -73,7 +102,7 @@ ${data.status}
 <div class="value">${data.vendor || "-"}</div>
 
 <div class="label">Estimasi Selesai (SLA):</div>
-<div class="value">${data.estimasi || "-"}</div>
+<div class="value">${formatTanggalIndonesia(data.estimasi)}</div>
 
 <div class="label">Catatan GA:</div>
 <div class="value">${data.catatan || "-"}</div>
