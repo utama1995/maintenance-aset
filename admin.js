@@ -1,22 +1,26 @@
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyEH8dkD-u1TU4pHPJ2ONVWWy4cqKoLQlB9jeJxtwdveidn5R5j7OYve7jbIepsFRawxQ/exec";
 
-window.onload = function(){
-
-loadTickets();
-
-};
+window.addEventListener("load", loadTickets);
 
 function loadTickets(){
 
-fetch(API_URL + "?action=getAllTickets")
-
-.then(res => res.json())
-
-.then(data => {
-
 const tbody =
 document.querySelector("#ticketTable tbody");
+
+tbody.innerHTML =
+"<tr><td colspan='5'>Loading...</td></tr>";
+
+fetch(API_URL + "?action=getAllTickets", {
+method: "GET",
+mode: "cors"
+})
+.then(function(response){
+
+return response.json();
+
+})
+.then(function(data){
 
 tbody.innerHTML = "";
 
@@ -29,33 +33,42 @@ return;
 
 }
 
-data.reverse().forEach(ticket => {
+for(let i = data.length - 1; i >= 0; i--){
 
-tbody.innerHTML += `
-<tr>
-<td>${ticket["Ticket ID"]}</td>
-<td>${ticket["Cabang"]}</td>
-<td>${ticket["Nama Aset"]}</td>
-<td>${ticket["Status"]}</td>
+const ticket = data[i];
+
+const row = document.createElement("tr");
+
+row.innerHTML = `
+<td>${ticket["Ticket ID"] || "-"}</td>
+<td>${ticket["Cabang"] || "-"}</td>
+<td>${ticket["Nama Aset"] || "-"}</td>
+<td>${ticket["Status"] || "-"}</td>
 <td>
-<button onclick="alert('Edit: ${ticket["Ticket ID"]}')">
+<button onclick="editTicket('${ticket["Ticket ID"]}')">
 Edit
 </button>
 </td>
-</tr>
 `;
 
-});
+tbody.appendChild(row);
+
+}
 
 })
+.catch(function(error){
 
-.catch(err => {
+console.error("ERROR:", error);
 
-console.error(err);
-
-document.querySelector("#ticketTable tbody").innerHTML =
-"<tr><td colspan='5'>Error load data</td></tr>";
+tbody.innerHTML =
+"<tr><td colspan='5'>Gagal load data</td></tr>";
 
 });
+
+}
+
+function editTicket(id){
+
+alert("Edit ticket: " + id);
 
 }
