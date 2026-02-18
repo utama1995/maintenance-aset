@@ -67,16 +67,14 @@ text-align:center;
 <h2>LAPOR KERUSAKAN</h2>
 
 <form id="formLapor">
-
+<label style="margin-top:10px; display:block;">Nama Pelapor</label>
 <input type="text" id="nama" placeholder="Nama Pelapor">
-
+<label style="margin-top:10px; display:block;">Cabang</label>
 <input type="text" id="cabang" placeholder="Cabang">
-
+<label style="margin-top:10px; display:block;">Nama Aset</label>
 <input type="text" id="aset" placeholder="Nama Aset">
 
-<label style="margin-top:10px; display:block;">
-Kategori Aset
-</label>
+<label style="margin-top:10px; display:block;">Kategori Aset</label>
 
 <select id="kategori">
 <option value="">Pilih Kategori Aset</option>
@@ -87,9 +85,9 @@ Kategori Aset
 <option value="Bangunan">Bangunan</option>
 </select>
 
-
+<label style="margin-top:10px; display:block;">Deskripsi Kerusakan</label>
 <textarea id="deskripsi" placeholder="Deskripsi Kerusakan"></textarea>
-
+<label style="margin-top:10px; display:block;">Upload Foto</label>
 <input type="file" id="foto">
 
 <button type="button" onclick="kirimLaporan()">
@@ -122,6 +120,7 @@ border-radius:5px;
 
 </body>
 </html>
+
 
 
 
