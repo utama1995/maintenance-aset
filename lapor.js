@@ -9,11 +9,9 @@ return null;
 }
 
 const formData = new FormData();
-
+formData.append("kategori", kategori);
 formData.append("file", file);
-
-formData.append(
-"upload_preset",
+formData.append("upload_preset",
 CLOUDINARY_UPLOAD_PRESET
 );
 
