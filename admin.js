@@ -1,4 +1,4 @@
-const API_URL ="https://script.google.com/macros/s/AKfycbzODJqajPX8S_XNefoz6s-PmaPoTBzBBLZ2oDoV4oWVdpnU6u-l9tChNWQhEv8Bn8w0qg/exec";
+const API_URL ="https://script.google.com/macros/s/AKfycbyUXO0EgsC9O2vWSdCQ_IrldJ-J1P8tnvy7wq6edIvCxJQBqQmrpY0aJLpS520qiAs8Gg/exec";
 
 window.addEventListener("load", loadTickets);
 
