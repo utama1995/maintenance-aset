@@ -88,6 +88,37 @@ border-radius:5px;
 </button>
 </a>
 </div>
+<div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+
+<div style="background:white; width:400px; margin:100px auto; padding:20px; border-radius:8px;">
+
+<h3>Edit Ticket</h3>
+
+<input type="hidden" id="editTicketId">
+
+<label>Status</label>
+<select id="editStatus">
+<option value="Waiting">Waiting</option>
+<option value="On Progress">On Progress</option>
+<option value="Done">Done</option>
+<option value="Cancel">Cancel</option>
+</select>
+
+<label>Vendor</label>
+<input type="text" id="editVendor">
+
+<label>Catatan GA</label>
+<textarea id="editCatatan"></textarea>
+
+<label>Estimasi Selesai</label>
+<input type="date" id="editEstimasi">
+
+<br><br>
+
+<button onclick="saveTicket()">SIMPAN</button>
+<button onclick="closeModal()">BATAL</button>
+</div>
+</div>
 <script src="admin.js"></script>
 
 </body>
