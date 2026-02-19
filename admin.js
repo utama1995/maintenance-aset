@@ -103,32 +103,51 @@ function closeModal(){
 document.getElementById("editModal").style.display = "none";
 }
 function saveTicket(){
+
 const ticket_id =
 document.getElementById("editTicketId").value;
+
 const status =
 document.getElementById("editStatus").value;
+
 const vendor =
 document.getElementById("editVendor").value;
+
 const catatan =
 document.getElementById("editCatatan").value;
+
 const estimasi =
 document.getElementById("editEstimasi").value;
+
 fetch(API_URL, {
+
 method:"POST",
+
 body:JSON.stringify({
+
 action:"updateTicket",
 ticket_id:ticket_id,
 status:status,
 vendor:vendor,
 catatan:catatan,
 estimasi:estimasi
+
 })
+
 })
+
 .then(res=>res.json())
+
 .then(data=>{
+
 alert("Berhasil update");
+
 closeModal();
+
 loadTickets();
+
 });
+
 }
+
 
