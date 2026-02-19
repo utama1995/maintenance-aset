@@ -69,7 +69,36 @@ tbody.innerHTML =
 function editTicket(ticketId){
 document.getElementById("editTicketId").value = ticketId;
 document.getElementById("editModal").style.display = "block";
+
+// Ambil data ticket dari server
+fetch(API_URL + "?action=getTicket&ticket_id=" + ticketId)
+.then(res => res.json())
+.then(data => {
+
+// Isi field otomatis
+document.getElementById("editStatus").value =
+data["Status"] || "Waiting";
+document.getElementById("editVendor").value =
+data["Vendor"] || "";
+document.getElementById("editCatatan").value =
+data["Catatan GA"] || "";
+
+// Format tanggal agar cocok dengan input date
+if(data["Estimasi Selesai"]){
+let tanggal =
+new Date(data["Estimasi Selesai"]);
+let yyyy =
+tanggal.getFullYear();
+let mm =
+String(tanggal.getMonth()+1).padStart(2,"0");
+let dd =
+String(tanggal.getDate()).padStart(2,"0");
+document.getElementById("editEstimasi").value =
+`${yyyy}-${mm}-${dd}`;
 }
+});
+}
+
 function closeModal(){
 document.getElementById("editModal").style.display = "none";
 }
