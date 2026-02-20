@@ -237,35 +237,7 @@ document.querySelector("#tabel tbody").innerHTML=
 }
 
 /* Load saat halaman dibuka */
-data.forEach(row=>{
-
-const ticket =
-row.ticket_id || row.ticket || row["Ticket ID"] || row.id;
-
-const cabang =
-row.cabang || row.tanggal;
-
-const pelapor =
-row.pelapor || row.nama;
-
-const deskripsi =
-row.deskripsi || row.aset;
-
-tbody.innerHTML+=`
-
-<tr>
-
-<td>${ticket}</td>
-<td>${cabang}</td>
-<td>${pelapor}</td>
-<td>${deskripsi}</td>
-<td>${row.status}</td>
-
-</tr>
-
-`;
-
-});
+loadData();
 
 </script>
 
