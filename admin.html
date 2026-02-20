@@ -207,6 +207,8 @@ const res = await fetch(API_URL+"?action=list");
 
 const data = await res.json();
 
+console.log(data);
+
 const tbody =
 document.querySelector("#tabel tbody");
 
@@ -214,31 +216,14 @@ tbody.innerHTML="";
 
 data.forEach(row=>{
 
-let statusClass="waiting";
-
-if(row.status=="Process") statusClass="process";
-if(row.status=="Done") statusClass="done";
-
 tbody.innerHTML+=`
-
 <tr>
-
 <td>${row.id}</td>
-
 <td>${row.tanggal}</td>
-
 <td>${row.nama}</td>
-
 <td>${row.aset}</td>
-
-<td>
-<span class="status ${statusClass}">
-${row.status}
-</span>
-</td>
-
+<td>${row.status}</td>
 </tr>
-
 `;
 
 });
