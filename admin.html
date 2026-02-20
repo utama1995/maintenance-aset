@@ -1,108 +1,117 @@
-<script>
-const token =
-localStorage.getItem("token");
-if(!token){
-  window.location="login.html";
-}
-</script>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ADMIN GA - Maintenance Aset</title>
+<title>Admin Panel - Maintenance Aset</title>
 
 <style>
 
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-}
-
-.modal-content{
-background:white;
-width:400px;
-margin:80px auto;
-padding:20px;
-border-radius:8px;
-}
-
-.form-group{
-margin-bottom:15px;
-}
-
-.form-group label{
-display:block;
-margin-bottom:5px;
-font-weight:bold;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-width:100%;
-padding:8px;
-box-sizing:border-box;
-}
-
-.button-group{
-text-align:right;
-}
-
-.btn-save{
-background:#1976d2;
-color:white;
-border:none;
-padding:8px 15px;
-cursor:pointer;
-}
-
-.btn-cancel{
-background:#777;
-color:white;
-border:none;
-padding:8px 15px;
-cursor:pointer;
-margin-left:5px;
-}
-
+/* Background */
 body{
-font-family:Arial;
-background:#f4f6f8;
+margin:0;
+font-family: Arial, Helvetica, sans-serif;
+background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+min-height:100vh;
 }
 
+/* Container utama */
 .container{
-width:900px;
-margin:40px auto;
+width:95%;
+max-width:1200px;
+margin:30px auto;
 background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+overflow:hidden;
 }
 
+/* Banner */
+.banner{
+height:140px;
+background:url("Banner Utama.png") center center;
+background-size:cover;
+}
+
+/* Header */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+background:#2c5364;
+color:white;
+}
+
+.header h2{
+margin:0;
+}
+
+.logout-btn{
+background:#e74c3c;
+border:none;
+padding:8px 15px;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+.logout-btn:hover{
+background:#c0392b;
+}
+
+/* Content */
+.content{
+padding:20px;
+}
+
+/* Table */
 table{
 width:100%;
 border-collapse:collapse;
-}
-
-th,td{
-padding:10px;
-border:1px solid #ccc;
-text-align:left;
+margin-top:15px;
 }
 
 th{
-background:#1976d2;
+background:#2c5364;
 color:white;
+padding:10px;
+text-align:left;
 }
 
-button{
-padding:5px 10px;
-cursor:pointer;
+td{
+padding:10px;
+border-bottom:1px solid #ddd;
+}
+
+tr:hover{
+background:#f2f2f2;
+}
+
+/* Status badge */
+.status{
+padding:4px 8px;
+border-radius:4px;
+color:white;
+font-size:12px;
+}
+
+.waiting{
+background:#f39c12;
+}
+
+.process{
+background:#3498db;
+}
+
+.done{
+background:#27ae60;
+}
+
+.footer{
+text-align:center;
+padding:15px;
+font-size:12px;
+color:#777;
 }
 
 </style>
@@ -111,89 +120,142 @@ cursor:pointer;
 
 <body>
 
+<script>
+
+/* Proteksi login */
+const token = localStorage.getItem("token");
+
+if(!token){
+
+alert("Silakan login terlebih dahulu");
+
+window.location.href="login.html";
+
+}
+
+</script>
+
 <div class="container">
 
-<h2>ADMIN GA - Maintenance Aset</h2>
+<div class="banner"></div>
 
-<table id="ticketTable">
+<div class="header">
+
+<h2>Admin Panel - Maintenance Aset</h2>
+
+<button class="logout-btn" onclick="logout()">Logout</button>
+
+</div>
+
+<div class="content">
+
+<h3>Daftar Tiket Maintenance</h3>
+
+<table id="tabel">
 
 <thead>
 <tr>
-<th>Ticket</th>
-<th>Cabang</th>
+<th>ID</th>
+<th>Tanggal</th>
+<th>Pelapor</th>
 <th>Aset</th>
 <th>Status</th>
-<th>Action</th>
 </tr>
 </thead>
 
 <tbody>
 
 <tr>
-<td colspan="5">Loading...</td>
+<td colspan="5">Memuat data...</td>
 </tr>
 
 </tbody>
 
 </table>
 
-<br>
-
-<a href="index.html">
-<button style="
-background:#6c757d;
-color:white;
-border:none;
-padding:10px 15px;
-cursor:pointer;
-border-radius:5px;
-">
-← Kembali ke Menu Utama
-</button>
-</a>
-</div>
-<div id="editModal" class="modal">
-
-<div class="modal-content">
-
-<h3>Edit Ticket</h3>
-
-<input type="hidden" id="editTicketId">
-
-<div class="form-group">
-<label>Status</label>
-<select id="editStatus">
-<option value="Waiting">Waiting</option>
-<option value="On Progress">On Progress</option>
-<option value="Done">Done</option>
-<option value="Cancel">Cancel</option>
-</select>
 </div>
 
-<div class="form-group">
-<label>Vendor</label>
-<input type="text" id="editVendor">
-</div>
-
-<div class="form-group">
-<label>Catatan GA</label>
-<textarea id="editCatatan"></textarea>
-</div>
-
-<div class="form-group">
-<label>Estimasi Selesai</label>
-<input type="date" id="editEstimasi">
-</div>
-
-<div class="button-group">
-<button onclick="saveTicket()" class="btn-save">SIMPAN</button>
-<button onclick="closeModal()" class="btn-cancel">BATAL</button>
+<div class="footer">
+Maintenance Asset Management System
 </div>
 
 </div>
-</div>
 
-<script src="admin.js"></script>
+<script>
+
+/* URL API maintenance */
+const API_URL =
+"https://script.google.com/macros/s/YOUR_API_MAINTENANCE/exec";
+
+
+/* Logout */
+function logout(){
+
+localStorage.removeItem("token");
+
+window.location.href="login.html";
+
+}
+
+
+/* Load data */
+async function loadData(){
+
+try{
+
+const res = await fetch(API_URL+"?action=list");
+
+const data = await res.json();
+
+const tbody =
+document.querySelector("#tabel tbody");
+
+tbody.innerHTML="";
+
+data.forEach(row=>{
+
+let statusClass="waiting";
+
+if(row.status=="Process") statusClass="process";
+if(row.status=="Done") statusClass="done";
+
+tbody.innerHTML+=`
+
+<tr>
+
+<td>${row.id}</td>
+
+<td>${row.tanggal}</td>
+
+<td>${row.nama}</td>
+
+<td>${row.aset}</td>
+
+<td>
+<span class="status ${statusClass}">
+${row.status}
+</span>
+</td>
+
+</tr>
+
+`;
+
+});
+
+}catch(err){
+
+document.querySelector("#tabel tbody").innerHTML=
+"<tr><td colspan='5'>Gagal memuat data</td></tr>";
+
+}
+
+}
+
+/* Load saat halaman dibuka */
+loadData();
+
+</script>
 
 </body>
 </html>
