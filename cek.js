@@ -22,7 +22,6 @@ return tanggalISO;
 
 }
 
-
 function cekStatus(){
 
 const ticket =
@@ -38,13 +37,18 @@ return;
 
 document.getElementById("hasil").innerHTML="Loading...";
 
-fetch(API_URL+"?ticket="+ticket)
+fetch(API_URL+"?action=list")
 
 .then(res=>res.json())
 
 .then(data=>{
 
-if(data.error){
+console.log(data);
+
+const found =
+data.find(item => item.status === ticket);
+
+if(!found){
 
 document.getElementById("hasil").innerHTML=
 "Ticket tidak ditemukan";
@@ -55,55 +59,37 @@ return;
 
 let statusClass="status-open";
 
-if(data.status=="On Progress")
+let statusText="Waiting";
+
+if(statusText=="On Progress")
 statusClass="status-progress";
 
-if(data.status=="Done")
+if(statusText=="Done")
 statusClass="status-done";
-
-
-let fotoHTML="";
-
-if(data.foto){
-
-fotoHTML=`
-<div class="label">Foto Kerusakan:</div>
-<img src="${data.foto}">
-`;
-
-}
 
 
 document.getElementById("hasil").innerHTML=
 
 `
 <div class="label">Ticket ID:</div>
-<div class="value">${data.ticket}</div>
+<div class="value">${found.status}</div>
+
+<div class="label">Nama Pelapor:</div>
+<div class="value">${found.cabang}</div>
+
+<div class="label">Email:</div>
+<div class="value">${found.pelapor}</div>
+
+<div class="label">Kategori Aset:</div>
+<div class="value">${found.aset}</div>
 
 <div class="label">Status:</div>
 <div class="value ${statusClass}">
-${data.status}
+${statusText}
 </div>
 
-<div class="label">Nama Pelapor:</div>
-<div class="value">${data.nama || "-"}</div>
-
-<div class="label">Cabang:</div>
-<div class="value">${data.cabang || "-"}</div>
-
-<div class="label">Nama Aset:</div>
-<div class="value">${data.aset || "-"}</div>
-
-<div class="label">Vendor:</div>
-<div class="value">${data.vendor || "-"}</div>
-
-<div class="label">Estimasi Selesai (SLA):</div>
-<div class="value">${formatTanggalIndonesia(data.estimasi)}</div>
-
-<div class="label">Catatan GA:</div>
-<div class="value">${data.catatan || "-"}</div>
-
-${fotoHTML}
+<div class="label">Foto Kerusakan:</div>
+<img src="${found.ticket_id}">
 `;
 
 })
@@ -112,6 +98,8 @@ ${fotoHTML}
 
 document.getElementById("hasil").innerHTML=
 "Error koneksi server";
+
+console.error(err);
 
 });
 
