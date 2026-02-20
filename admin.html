@@ -155,10 +155,10 @@ window.location.href="login.html";
 
 <thead>
 <tr>
-<th>ID</th>
-<th>Tanggal</th>
+<th>Ticket ID</th>
+<th>Cabang</th>
 <th>Pelapor</th>
-<th>Aset</th>
+<th>Deskripsi</th>
 <th>Status</th>
 </tr>
 </thead>
@@ -217,9 +217,9 @@ data.forEach(row=>{
 
 tbody.innerHTML+=`
 <tr>
-<td>${row.id}</td>
-<td>${row.tanggal}</td>
-<td>${row.nama}</td>
+<td>${row.ticket_id}</td>
+<td>${row.cabang}</td>
+<td>${row.pelapor}</td>
 <td>${row.aset}</td>
 <td>${row.status}</td>
 </tr>
