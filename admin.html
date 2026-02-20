@@ -157,8 +157,8 @@ window.location.href="login.html";
 <tr>
 <th>Ticket ID</th>
 <th>Nama Pelapor</th>
-<th>Email</th>
-<th>Kategori</th>
+<th>Nama Aset</th>
+<th>Deskripsi Kerusakan</th>
 <th>Status</th>
 </tr>
 </thead>
@@ -219,11 +219,11 @@ tbody.innerHTML+=`
 
 <tr>
 
-<td>${row.status}</td>
-<td>${row.cabang}</td>
-<td>${row.pelapor}</td>
-<td>${row.aset}</td>
-<td>Waiting</td>
+<td>${row.status}</td>     <!-- Ticket ID -->
+<td>${row.cabang}</td>     <!-- Nama Pelapor -->
+<td>${row.pelapor}</td>    <!-- Nama Aset -->
+<td>${row.aset}</td>       <!-- Deskripsi Kerusakan -->
+<td>Waiting</td>           <!-- Status -->
 
 </tr>
 
