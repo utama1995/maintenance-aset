@@ -202,39 +202,45 @@ async function loadData(){
 
 try{
 
-const res =
-await fetch(API_URL+"?action=list");
+const res = await fetch(API_URL + "?action=list");
 
-const data =
-await res.json();
+const data = await res.json();
 
-const tbody =
-document.querySelector("#tabel tbody");
+const tbody = document.querySelector("#tabel tbody");
 
-tbody.innerHTML="";
+tbody.innerHTML = "";
 
-data.forEach(row=>{
+data.forEach(row => {
 
-tbody.innerHTML+=`
+const ticketId  = row.foto || "-";
+const nama      = row.nama || "-";
+const namaAset  = row.lokasi || "-";
+const deskripsi = row.aset || "-";
+const status    = row.status || "-";
 
+let statusClass = "status-open";
+
+if(status === "On Progress") statusClass = "status-progress";
+if(status === "Done") statusClass = "status-done";
+
+tbody.innerHTML += `
 <tr>
-
-<td>${row.status}</td>     <!-- Ticket ID -->
-<td>${row.cabang}</td>     <!-- Nama Pelapor -->
-<td>${row.pelapor}</td>    <!-- Nama Aset -->
-<td>${row.aset}</td>       <!-- Deskripsi Kerusakan -->
-<td>Waiting</td>           <!-- Status -->
-
+<td>${ticketId}</td>
+<td>${nama}</td>
+<td>${namaAset}</td>
+<td>${deskripsi}</td>
+<td><span class="${statusClass}">${status}</span></td>
 </tr>
-
 `;
 
 });
 
 }catch(err){
 
-document.querySelector("#tabel tbody").innerHTML=
+document.querySelector("#tabel tbody").innerHTML =
 "<tr><td colspan='5'>Gagal memuat data</td></tr>";
+
+console.error(err);
 
 }
 
