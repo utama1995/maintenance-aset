@@ -1,55 +1,184 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login Admin</title>
+<meta charset="UTF-8">
+<title>Login Admin - Maintenance Aset</title>
+
+<style>
+
+/* Reset dasar */
+body{
+margin:0;
+font-family: Arial, Helvetica, sans-serif;
+background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* Container utama */
+.login-container{
+background:white;
+width:400px;
+border-radius:12px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+overflow:hidden;
+}
+
+/* Banner */
+.banner{
+width:100%;
+height:140px;
+background:url("Banner Utama.png") center center;
+background-size:cover;
+}
+
+/* Area form */
+.form-area{
+padding:30px;
+}
+
+/* Judul */
+.form-area h2{
+margin-top:0;
+text-align:center;
+color:#333;
+}
+
+/* Input */
+.form-area input{
+width:100%;
+padding:12px;
+margin-top:10px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
+font-size:14px;
+transition:0.3s;
+}
+
+.form-area input:focus{
+border-color:#2c5364;
+outline:none;
+box-shadow:0 0 5px rgba(44,83,100,0.5);
+}
+
+/* Tombol */
+.form-area button{
+width:100%;
+padding:12px;
+background:#2c5364;
+color:white;
+border:none;
+border-radius:6px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.form-area button:hover{
+background:#203a43;
+}
+
+/* Status */
+#status{
+text-align:center;
+margin-top:10px;
+font-size:14px;
+color:#333;
+}
+
+/* Footer */
+.footer{
+text-align:center;
+font-size:12px;
+color:#777;
+margin-top:15px;
+}
+
+</style>
+
 </head>
 
 <body>
 
+<div class="login-container">
+
+<div class="banner"></div>
+
+<div class="form-area">
+
 <h2>Login Admin</h2>
 
-<input id="username" placeholder="Username"><br><br>
+<input id="username" placeholder="Username">
 
-<input id="password" type="password" placeholder="Password"><br><br>
+<input id="password" type="password" placeholder="Password">
 
 <button onclick="login()">Login</button>
 
+<p id="status"></p>
+
+<div class="footer">
+Maintenance Asset System
+</div>
+
+</div>
+
+</div>
+
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyhWeH-UrHJaQeVavL0wD_P8d-GFApOf57iCwPkEatS5e4pkxjQVKGFh2g_EQv79hTSYA/exec";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyhWeH-UrHJaQeVavL0wD_P8d-GFApOf57iCwPkEatS5e4pkxjQVKGFh2g_EQv79hTSYA/exec";
+
 
 async function login(){
 
-  const username =
-    document.getElementById("username").value;
+document.getElementById("status").innerText="Memproses login...";
 
-  const password =
-    document.getElementById("password").value;
+const username =
+document.getElementById("username").value;
 
-  const formData = new FormData();
+const password =
+document.getElementById("password").value;
 
-  formData.append("action","login");
-  formData.append("username",username);
-  formData.append("password",password);
+const formData = new FormData();
 
-  const res = await fetch(API_URL,{
-    method:"POST",
-    body:formData
-  });
+formData.append("action","login");
+formData.append("username",username);
+formData.append("password",password);
 
-  const data = await res.json();
+try{
 
-  if(data.success){
+const res = await fetch(API_URL,{
+method:"POST",
+body:formData
+});
 
-    localStorage.setItem("token",data.token);
+const data = await res.json();
 
-    window.location="admin.html";
+if(data.success){
 
-  }else{
+localStorage.setItem("token",data.token);
 
-    alert("Login gagal");
+document.getElementById("status").innerText="Login berhasil";
 
-  }
+setTimeout(()=>{
+window.location.href="admin.html";
+},500);
+
+}else{
+
+document.getElementById("status").innerText="Username atau password salah";
+
+}
+
+}catch(err){
+
+document.getElementById("status").innerText="Koneksi gagal";
+
+}
 
 }
 
