@@ -202,11 +202,11 @@ async function loadData(){
 
 try{
 
-const res = await fetch(API_URL+"?action=list");
+const res =
+await fetch(API_URL+"?action=list");
 
-const data = await res.json();
-
-console.log(data);
+const data =
+await res.json();
 
 const tbody =
 document.querySelector("#tabel tbody");
@@ -216,13 +216,17 @@ tbody.innerHTML="";
 data.forEach(row=>{
 
 tbody.innerHTML+=`
+
 <tr>
+
 <td>${row.status}</td>
 <td>${row.cabang}</td>
 <td>${row.pelapor}</td>
 <td>${row.aset}</td>
 <td>Waiting</td>
+
 </tr>
+
 `;
 
 });
