@@ -1,0 +1,26 @@
+<button onclick="test()">Test Login</button>
+
+<script>
+
+async function test(){
+
+const formData = new FormData();
+
+formData.append("action","login");
+formData.append("username","admin");
+formData.append("password","admin123");
+
+const res = await fetch(
+"https://script.google.com/macros/s/AKfycbxMcMzZophbnVzfJYIiTzzzrfp3KbMRzGEhnYpZYFq6b9TDVX6ydhgU2mLZlGTyRb0k3Q/exec",
+{
+method:"POST",
+body:formData
+});
+
+const data = await res.json();
+
+alert(JSON.stringify(data));
+
+}
+
+</script>
