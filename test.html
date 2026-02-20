@@ -1,13 +1,24 @@
-<button onclick="test()">Test Login</button>
+<!DOCTYPE html>
+<html>
+<body>
+
+<button onclick="testLogin()">TEST LOGIN API</button>
+
+<p id="hasil"></p>
 
 <script>
-async function test(){
+
+async function testLogin(){
+
+document.getElementById("hasil").innerText = "Testing...";
 
 const formData = new FormData();
 
 formData.append("action","login");
 formData.append("username","admin");
 formData.append("password","admin123");
+
+try{
 
 const res = await fetch(
 "https://script.google.com/macros/s/AKfycbwlpNIUOyHtyDpqde0N8yAsGNOLgK7jXg2e7_vHmeft3UJFPtDAQS0VRTSJYRUU-YjtdA/exec",
@@ -18,7 +29,19 @@ body:formData
 
 const data = await res.json();
 
-alert(JSON.stringify(data));
+document.getElementById("hasil").innerText =
+JSON.stringify(data);
+
+}catch(err){
+
+document.getElementById("hasil").innerText =
+"ERROR: " + err;
 
 }
+
+}
+
 </script>
+
+</body>
+</html>
