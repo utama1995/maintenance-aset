@@ -214,8 +214,6 @@ window.location.href="login.html";
 
 }
 
-
-/* Load data */
 async function loadData(){
 
 try{
@@ -226,6 +224,21 @@ const data = await res.json();
 
 const tbody = document.querySelector("#tabel tbody");
 
+tbody.innerHTML = ""; // reset tabel
+
+data.forEach(row => {
+
+const ticketId  = row.foto || "-";     // Ticket ID
+const nama      = row.nama || "-";     // Nama Pelapor
+const namaAset  = row.lokasi || "-";   // Nama Aset
+const deskripsi = row.aset || "-";     // Deskripsi
+const status    = row.status || "-";   // Status
+
+let statusClass = "waiting";
+
+if(status === "On Progress") statusClass = "process";
+if(status === "Done") statusClass = "done";
+
 tbody.innerHTML += `
 <tr>
 
@@ -235,7 +248,7 @@ tbody.innerHTML += `
 <td>${deskripsi}</td>
 
 <td>
-<span class="${statusClass}">
+<span class="status ${statusClass}">
 ${status}
 </span>
 </td>
@@ -254,7 +267,7 @@ Edit
 }catch(err){
 
 document.querySelector("#tabel tbody").innerHTML =
-"<tr><td colspan='5'>Gagal memuat data</td></tr>";
+"<tr><td colspan='6'>Gagal memuat data</td></tr>";
 
 console.error(err);
 
@@ -265,6 +278,62 @@ console.error(err);
 /* Load saat halaman dibuka */
 loadData();
 
+function openEditModal(ticketId,status){
+
+document.getElementById("edit_ticket").value = ticketId;
+document.getElementById("edit_status").value = status;
+
+document.getElementById("editModal").style.display = "block";
+
+}
+
+function closeModal(){
+
+document.getElementById("editModal").style.display = "none";
+
+}
+
+function saveEdit(){
+
+const ticketId = document.getElementById("edit_ticket").value;
+const status   = document.getElementById("edit_status").value;
+const catatan  = document.getElementById("edit_catatan").value;
+const vendor   = document.getElementById("edit_vendor").value;
+
+fetch(API_URL,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+action:"updateTicket",
+ticket_id:ticketId,
+status:status,
+catatan:catatan,
+vendor:vendor
+})
+})
+.then(res=>res.json())
+.then(result=>{
+
+if(result.success){
+
+alert("Update berhasil");
+
+closeModal();
+
+loadData();
+
+}else{
+
+alert("Update gagal");
+
+}
+
+});
+
+}
+  
 </script>
 
 <div id="editModal" class="modal">
