@@ -6,33 +6,22 @@
 
 <style>
 
-/* Background */
 body{
 margin:0;
-font-family: Arial, Helvetica, sans-serif;
-background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-min-height:100vh;
+font-family:Arial,Helvetica,sans-serif;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 }
 
-/* Container utama */
 .container{
 width:95%;
 max-width:1200px;
 margin:30px auto;
 background:white;
-border-radius:12px;
+border-radius:10px;
 box-shadow:0 10px 25px rgba(0,0,0,0.3);
 overflow:hidden;
 }
 
-/* Banner */
-.banner{
-width:100%;
-margin-bottom:15px;
-border-radius:8px;
-}
-
-/* Header */
 .header{
 display:flex;
 justify-content:space-between;
@@ -40,10 +29,6 @@ align-items:center;
 padding:15px 20px;
 background:#2c5364;
 color:white;
-}
-
-.header h2{
-margin:0;
 }
 
 .logout-btn{
@@ -55,27 +40,19 @@ border-radius:6px;
 cursor:pointer;
 }
 
-.logout-btn:hover{
-background:#c0392b;
-}
-
-/* Content */
 .content{
 padding:20px;
 }
 
-/* Table */
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:15px;
 }
 
 th{
 background:#2c5364;
 color:white;
 padding:10px;
-text-align:left;
 }
 
 td{
@@ -87,7 +64,15 @@ tr:hover{
 background:#f2f2f2;
 }
 
-/* Status badge */
+button{
+padding:6px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:#2c5364;
+color:white;
+}
+
 .status{
 padding:4px 8px;
 border-radius:4px;
@@ -95,16 +80,42 @@ color:white;
 font-size:12px;
 }
 
-.waiting{
-background:#f39c12;
+.waiting{background:#f39c12;}
+.process{background:#3498db;}
+.done{background:#27ae60;}
+
+.modal{
+display:none;
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
 }
 
-.process{
-background:#3498db;
+.modal-content{
+background:white;
+width:400px;
+margin:8% auto;
+padding:20px;
+border-radius:10px;
 }
 
-.done{
+.modal-content input,
+.modal-content textarea,
+.modal-content select{
+width:100%;
+padding:8px;
+margin-bottom:10px;
+}
+
+.save-btn{
 background:#27ae60;
+}
+
+.cancel-btn{
+background:#999;
 }
 
 .footer{
@@ -114,122 +125,48 @@ font-size:12px;
 color:#777;
 }
 
-/* MODAL BACKGROUND */
-.modal{
-display:none;
-position:fixed;
-z-index:999;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-}
-
-/* MODAL BOX */
-.modal-content{
-background:white;
-width:420px;
-margin:8% auto;
-padding:25px;
-border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,0.3);
-animation:fadeIn 0.2s ease;
-}
-
-/* INPUT */
-.modal-content input,
-.modal-content select,
-.modal-content textarea{
-width:100%;
-padding:8px;
-margin-top:5px;
-margin-bottom:12px;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-/* BUTTON */
-.modal-content button{
-padding:8px 14px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-margin-right:5px;
-}
-
-.save-btn{
-background:#2c5364;
-color:white;
-}
-
-.cancel-btn{
-background:#999;
-color:white;
-}
-
-/* ANIMATION */
-@keyframes fadeIn{
-from{opacity:0;transform:scale(0.9);}
-to{opacity:1;transform:scale(1);}
-}
-
 </style>
 
 </head>
-
 <body>
 
 <script>
-
-/* Proteksi login */
 const token = localStorage.getItem("token");
 
 if(!token){
-
 alert("Silakan login terlebih dahulu");
-
 window.location.href="login.html";
-
 }
-
 </script>
 
 <div class="container">
 
-<div class="banner"></div>
-
 <div class="header">
-
 <h2>Admin Panel - Maintenance Aset</h2>
-
 <button class="logout-btn" onclick="logout()">Logout</button>
-
 </div>
 
 <div class="content">
 
-<h3>Daftar Laporan Maintenance Aset</h3>
+<h3>Daftar Laporan</h3>
 
 <table id="tabel">
 
 <thead>
 <tr>
 <th>Ticket ID</th>
-<th>Nama Pelapor</th>
-<th>Nama Aset</th>
-<th>Deskripsi Kerusakan</th>
+<th>Pelapor</th>
+<th>Aset</th>
+<th>Deskripsi</th>
 <th>Status</th>
 <th>Action</th>
 </tr>
 </thead>
 
 <tbody>
-
 <tr>
-<td colspan="5">Memuat data...</td>
+<td colspan="6">Memuat data...</td>
 </tr>
-
 </tbody>
 
 </table>
@@ -242,157 +179,8 @@ Maintenance Asset Management System
 
 </div>
 
-<script>
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbwAuwcAOQhi7q90-kVLciUIcjbeDmF6fdc17gpbwXe8ZXfU6L6npyfBbkR_YidGFLDtCA/exec";
-
-/* Logout */
-function logout(){
-
-localStorage.removeItem("token");
-
-window.location.href="login.html";
-
-}
-
-async function loadData(){
-
-try{
-
-const res = await fetch(API_URL + "?action=list");
-
-const data = await res.json();
-
-const tbody = document.querySelector("#tabel tbody");
-
-tbody.innerHTML = ""; // reset tabel
-
-data.forEach(row => {
-
-const ticketId  = row.foto || "-";     // Ticket ID
-const nama      = row.nama || "-";     // Nama Pelapor
-const namaAset  = row.lokasi || "-";   // Nama Aset
-const deskripsi = row.aset || "-";     // Deskripsi
-const status    = row.status || "-";   // Status
-
-let statusClass = "waiting";
-
-if(status === "On Progress") statusClass = "process";
-if(status === "Done") statusClass = "done";
-
-tbody.innerHTML += `
-<tr>
-
-<td>${ticketId}</td>
-<td>${nama}</td>
-<td>${namaAset}</td>
-<td>${deskripsi}</td>
-
-<td>
-<span class="status ${statusClass}">
-${status}
-</span>
-</td>
-
-<td>
-<button onclick="openEditModal('${ticketId}','${status}')">
-Edit
-</button>
-</td>
-
-</tr>
-`;
-
-});
-
-}catch(err){
-
-document.querySelector("#tabel tbody").innerHTML =
-"<tr><td colspan='6'>Gagal memuat data</td></tr>";
-
-console.error(err);
-
-}
-
-}
-
-/* Load saat halaman dibuka */
-loadData();
-
-function openEditModal(ticketId,status){
-
-document.getElementById("edit_ticket").value = ticketId;
-document.getElementById("edit_status").value = status;
-
-document.getElementById("edit_catatan").value = "";
-document.getElementById("edit_vendor").value = "";
-
-document.getElementById("editModal").style.display="block";
-
-}
-
-function closeModal(){
-
-document.getElementById("editModal").style.display = "none";
-
-}
-
-function saveEdit(){
-
-const ticketId =
-document.getElementById("edit_ticket").value;
-
-const status =
-document.getElementById("edit_status").value;
-
-const catatan =
-document.getElementById("edit_catatan").value;
-
-const vendor =
-document.getElementById("edit_vendor").value;
-
-
-const formData = new FormData();
-
-formData.append("action","updateTicket");
-formData.append("ticketId",ticketId);
-formData.append("status",status);
-formData.append("catatanGA",catatan);
-formData.append("vendor",vendor);
-
-
-fetch(API_URL,{
-method:"POST",
-body:formData
-})
-.then(res=>res.json())
-.then(result=>{
-
-if(result.success){
-
-alert("Update berhasil");
-
-closeModal();
-
-loadData();
-
-}else{
-
-alert("Update gagal");
-
-}
-
-})
-.catch(err=>{
-alert("Error koneksi");
-console.error(err);
-});
-
-}
-  
-</script>
-
+<!-- MODAL -->
 <div id="editModal" class="modal">
 
 <div class="modal-content">
@@ -419,6 +207,161 @@ console.error(err);
 <button class="cancel-btn" onclick="closeModal()">Cancel</button>
 
 </div>
+
 </div>
+
+
+<script>
+
+const API_URL="https://script.google.com/macros/s/AKfycbwAuwcAOQhi7q90-kVLciUIcjbeDmF6fdc17gpbwXe8ZXfU6L6npyfBbkR_YidGFLDtCA/exec";
+
+
+function logout(){
+localStorage.removeItem("token");
+window.location.href="login.html";
+}
+
+
+async function loadData(){
+
+const tbody=document.querySelector("#tabel tbody");
+
+tbody.innerHTML="<tr><td colspan='6'>Loading...</td></tr>";
+
+try{
+
+const res=await fetch(API_URL+"?action=list");
+
+const data=await res.json();
+
+tbody.innerHTML="";
+
+data.forEach(row=>{
+
+const ticketId=row.id || "-";
+const nama=row.nama || "-";
+const aset=row.aset || "-";
+const deskripsi=row.deskripsi || "-";
+const status=row.status || "Waiting";
+
+let statusClass="waiting";
+
+if(status==="On Progress")statusClass="process";
+if(status==="Done")statusClass="done";
+
+tbody.innerHTML+=`
+<tr>
+
+<td>${ticketId}</td>
+<td>${nama}</td>
+<td>${aset}</td>
+<td>${deskripsi}</td>
+
+<td>
+<span class="status ${statusClass}">
+${status}
+</span>
+</td>
+
+<td>
+<button onclick="openEditModal('${ticketId}','${status}')">
+Edit
+</button>
+</td>
+
+</tr>
+`;
+
+});
+
+}catch(err){
+
+tbody.innerHTML="<tr><td colspan='6'>Gagal memuat data</td></tr>";
+
+}
+
+}
+
+
+function openEditModal(ticket,status){
+
+document.getElementById("edit_ticket").value=ticket;
+document.getElementById("edit_status").value=status;
+
+document.getElementById("edit_catatan").value="";
+document.getElementById("edit_vendor").value="";
+
+document.getElementById("editModal").style.display="block";
+
+}
+
+
+function closeModal(){
+
+document.getElementById("editModal").style.display="none";
+
+}
+
+
+async function saveEdit(){
+
+const ticket_id=document.getElementById("edit_ticket").value;
+const status=document.getElementById("edit_status").value;
+const catatan=document.getElementById("edit_catatan").value;
+const vendor=document.getElementById("edit_vendor").value;
+
+
+try{
+
+const res=await fetch(API_URL,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+action:"updateTicket",
+ticket_id:ticket_id,
+status:status,
+catatan:catatan,
+vendor:vendor,
+estimasi:""
+
+})
+
+});
+
+const result=await res.json();
+
+if(result.success){
+
+alert("Berhasil update");
+
+closeModal();
+
+loadData();
+
+}else{
+
+alert("Update gagal");
+
+}
+
+}catch(err){
+
+alert("Error koneksi");
+
+}
+
+}
+
+
+loadData();
+
+</script>
+
 </body>
 </html>
