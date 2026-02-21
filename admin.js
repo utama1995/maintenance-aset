@@ -29,7 +29,6 @@ tbody.innerHTML =
 "<tr><td colspan='5'>Tidak ada data</td></tr>";
 
 return;
-
 }
 
 for(let i = data.length - 1; i >= 0; i--){
