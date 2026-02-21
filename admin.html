@@ -160,6 +160,7 @@ window.location.href="login.html";
 <th>Nama Aset</th>
 <th>Deskripsi Kerusakan</th>
 <th>Status</th>
+<th>Action</th>
 </tr>
 </thead>
 
@@ -208,28 +209,26 @@ const data = await res.json();
 
 const tbody = document.querySelector("#tabel tbody");
 
-tbody.innerHTML = "";
-
-data.forEach(row => {
-
-const ticketId  = row.foto || "-";
-const nama      = row.nama || "-";
-const namaAset  = row.lokasi || "-";
-const deskripsi = row.aset || "-";
-const status    = row.status || "-";
-
-let statusClass = "status-open";
-
-if(status === "On Progress") statusClass = "status-progress";
-if(status === "Done") statusClass = "status-done";
-
 tbody.innerHTML += `
 <tr>
+
 <td>${ticketId}</td>
 <td>${nama}</td>
 <td>${namaAset}</td>
 <td>${deskripsi}</td>
-<td><span class="${statusClass}">${status}</span></td>
+
+<td>
+<span class="${statusClass}">
+${status}
+</span>
+</td>
+
+<td>
+<button onclick="openEditModal('${ticketId}','${status}')">
+Edit
+</button>
+</td>
+
 </tr>
 `;
 
