@@ -114,22 +114,64 @@ font-size:12px;
 color:#777;
 }
 
+/* MODAL BACKGROUND */
 .modal{
 display:none;
 position:fixed;
-top:0;
+z-index:999;
 left:0;
+top:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,0.5);
 }
 
+/* MODAL BOX */
 .modal-content{
 background:white;
-padding:20px;
-margin:100px auto;
-width:400px;
-border-radius:8px;
+width:420px;
+margin:8% auto;
+padding:25px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.3);
+animation:fadeIn 0.2s ease;
+}
+
+/* INPUT */
+.modal-content input,
+.modal-content select,
+.modal-content textarea{
+width:100%;
+padding:8px;
+margin-top:5px;
+margin-bottom:12px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+/* BUTTON */
+.modal-content button{
+padding:8px 14px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin-right:5px;
+}
+
+.save-btn{
+background:#2c5364;
+color:white;
+}
+
+.cancel-btn{
+background:#999;
+color:white;
+}
+
+/* ANIMATION */
+@keyframes fadeIn{
+from{opacity:0;transform:scale(0.9);}
+to{opacity:1;transform:scale(1);}
 }
 
 </style>
@@ -283,7 +325,10 @@ function openEditModal(ticketId,status){
 document.getElementById("edit_ticket").value = ticketId;
 document.getElementById("edit_status").value = status;
 
-document.getElementById("editModal").style.display = "block";
+document.getElementById("edit_catatan").value = "";
+document.getElementById("edit_vendor").value = "";
+
+document.getElementById("editModal").style.display="block";
 
 }
 
@@ -295,23 +340,31 @@ document.getElementById("editModal").style.display = "none";
 
 function saveEdit(){
 
-const ticketId = document.getElementById("edit_ticket").value;
-const status   = document.getElementById("edit_status").value;
-const catatan  = document.getElementById("edit_catatan").value;
-const vendor   = document.getElementById("edit_vendor").value;
+const ticketId =
+document.getElementById("edit_ticket").value;
+
+const status =
+document.getElementById("edit_status").value;
+
+const catatan =
+document.getElementById("edit_catatan").value;
+
+const vendor =
+document.getElementById("edit_vendor").value;
+
+
+const formData = new FormData();
+
+formData.append("action","updateTicket");
+formData.append("ticketId",ticketId);
+formData.append("status",status);
+formData.append("catatanGA",catatan);
+formData.append("vendor",vendor);
+
 
 fetch(API_URL,{
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-action:"updateTicket",
-ticket_id:ticketId,
-status:status,
-catatan:catatan,
-vendor:vendor
-})
+body:formData
 })
 .then(res=>res.json())
 .then(result=>{
@@ -330,6 +383,10 @@ alert("Update gagal");
 
 }
 
+})
+.catch(err=>{
+alert("Error koneksi");
+console.error(err);
 });
 
 }
@@ -358,10 +415,8 @@ alert("Update gagal");
 <label>Vendor</label>
 <input id="edit_vendor">
 
-<br><br>
-
-<button onclick="saveEdit()">Save</button>
-<button onclick="closeModal()">Cancel</button>
+<button class="save-btn" onclick="saveEdit()">Save</button>
+<button class="cancel-btn" onclick="closeModal()">Cancel</button>
 
 </div>
 </div>
